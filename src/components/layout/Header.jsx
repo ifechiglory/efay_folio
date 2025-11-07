@@ -1,13 +1,30 @@
-// src/components/layout/Header.jsx
-import { Link, useLocation } from "react-router-dom";
-import { Code2, LogIn } from "lucide-react";
-import Button from "../ui/Button";
+import { Link, useLocation } from 'react-router-dom';
+import { Code2, LogIn, Menu, X } from 'lucide-react';
+import Button from '../ui/Button';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Header = () => {
   const location = useLocation();
   const showAdminButton = import.meta.env.VITE_SHOW_ADMIN_BUTTON === "true";
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.hash === path;
+
+  const navigationItems = [
+    { href: "#home", label: "Home" },
+    { href: "#about", label: "About" },
+    { href: "#projects", label: "Projects" },
+    { href: "#contact", label: "Contact" },
+  ];
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
@@ -15,59 +32,31 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/logo.png"></img>
+            <img src='/logo.png' alt="Logo" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               Efay
             </span>
           </Link>
 
-          {/* Navigation */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a
-              href="#home"
-              className={`transition-colors ${
-                isActive("#home")
-                  ? "text-blue-600 dark:text-blue-400 font-medium"
-                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-            >
-              Home
-            </a>
-            <a
-              href="#about"
-              className={`transition-colors ${
-                isActive("#about")
-                  ? "text-blue-600 dark:text-blue-400 font-medium"
-                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-            >
-              About
-            </a>
-
-            <a
-              href="#projects"
-              className={`transition-colors ${
-                isActive("#projects")
-                  ? "text-blue-600 dark:text-blue-400 font-medium"
-                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-            >
-              Projects
-            </a>
-            <a
-              href="#contact"
-              className={`transition-colors ${
-                isActive("#contact")
-                  ? "text-blue-600 dark:text-blue-400 font-medium"
-                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-            >
-              Contact
-            </a>
+            {navigationItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`transition-colors ${
+                  isActive(item.href)
+                    ? "text-blue-600 dark:text-blue-400 font-medium"
+                    : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
 
-          {/* Theme Toggle & Admin */}
-          <div className="flex items-center space-x-4">
+          {/* Desktop Theme Toggle & Admin */}
+          <div className="hidden md:flex items-center space-x-4">
             {showAdminButton && (
               <Link to="/admin/login">
                 <Button variant="primary" size="sm" icon={LogIn}>
@@ -76,7 +65,63 @@ const Header = () => {
               </Link>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center space-x-2">
+            <button
+              onClick={toggleMobileMenu}
+              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700"
+          >
+            <nav className="flex flex-col space-y-4 pt-4">
+              {navigationItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={closeMobileMenu}
+                  className={`py-2 px-4 rounded-lg transition-colors ${
+                    isActive(item.href)
+                      ? "text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/20"
+                      : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              ))}
+              
+              {/* Mobile Admin Button */}
+              {showAdminButton && (
+                <Link 
+                  to="/admin/login" 
+                  onClick={closeMobileMenu}
+                  className="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-center"
+                >
+                  <div className="flex items-center justify-center space-x-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>Admin</span>
+                  </div>
+                </Link>
+              )}
+            </nav>
+          </motion.div>
+        )}
       </div>
     </header>
   );

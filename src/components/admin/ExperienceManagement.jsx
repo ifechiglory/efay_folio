@@ -48,13 +48,13 @@ const ExperienceManagement = () => {
     // Convert existing data for the form
     const formData = {
       ...experience,
-      startDate: experience.start_date, // Already in correct format
-      endDate: experience.end_date, // Already in correct format
+      startDate: experience.start_date,
+      endDate: experience.end_date,
       description: Array.isArray(experience.description)
-        ? experience.description.join(" ") // Convert array back to string for form
+        ? experience.description.join(" ") 
         : experience.description,
       skills: Array.isArray(experience.skills)
-        ? experience.skills.join(", ") // Convert array back to string for form
+        ? experience.skills.join(", ")
         : experience.skills,
     };
 
@@ -66,12 +66,11 @@ const ExperienceManagement = () => {
     try {
       console.log("🟢 Raw form data:", data);
 
-      // Date inputs now provide proper YYYY-MM-DD format
       const experienceData = {
         company: data.company,
         position: data.position,
-        start_date: data.startDate, // Already in YYYY-MM-DD format
-        end_date: data.current ? null : data.endDate, // Already in YYYY-MM-DD format
+        start_date: data.startDate,
+        end_date: data.current ? null : data.endDate,
         current: data.current || false,
         description: data.description
           ? data.description
@@ -241,8 +240,6 @@ const ExperienceManagement = () => {
                     </Button>
                   </div>
                 </div>
-
-                {/* FIXED: Use Supabase field names (start_date, end_date) instead of form names (startDate, endDate) */}
                 <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
                   <span>
                     {formatDate(experience.start_date)} -{" "}

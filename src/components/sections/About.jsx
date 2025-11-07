@@ -23,32 +23,13 @@ const About = () => {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString || dateString === "null" || dateString === "undefined") {
-      return "Date not set";
-    }
+    if (!dateString) return "";
 
-    try {
-      // For YYYY-MM-DD format, manually parse it
-      if (typeof dateString === "string" && dateString.includes("-")) {
-        const [year, month, day] = dateString.split("-");
-        // Format directly to MM/DD/YYYY without using Date object
-        return `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}`;
-      }
-
-      // Fallback for other formats
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return "Invalid date";
-      }
-
-      return date.toLocaleDateString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "numeric",
-      });
-    } catch (error) {
-      return "Date error";
-    }
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+    });
   };
 
   return (
@@ -191,15 +172,10 @@ const About = () => {
                       </h4>
                       <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1 sm:mt-0">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {experience.startDate
-                          ? formatDate(experience.startDate)
-                          : "Start date not set"}{" "}
-                        -{" "}
+                        {formatDate(experience.start_date)} -{" "}
                         {experience.current
                           ? "Present"
-                          : experience.endDate
-                          ? formatDate(experience.endDate)
-                          : "End date not set"}
+                          : formatDate(experience.end_date)}
                       </div>
                     </div>
 

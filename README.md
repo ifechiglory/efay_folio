@@ -52,7 +52,7 @@ A modern, responsive portfolio website built with React, Vite, and Tailwind CSS.
 
    ```bash
 
-   git clone https://github.com/yourusername/portfolio.git
+   git clone
 
    cd portfolio
 

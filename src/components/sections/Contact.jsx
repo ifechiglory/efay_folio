@@ -229,7 +229,7 @@ const Contact = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between mt-8">
+              <div className="flex flex-col md:flex-row items-center justify-between md:mt-8 gap-4">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   I typically respond within 24 hours
                 </p>
