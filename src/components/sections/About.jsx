@@ -238,7 +238,7 @@ const About = () => {
                                     width: `${skill.proficiency * 10}%`,
                                   }}
                                   transition={{ duration: 1, delay: 0.2 }}
-                                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full shadow-inner"
+                                  className="bg-linear-to-r from-blue-500 to-blue-600 h-2.5 rounded-full shadow-inner"
                                 />
                               </div>
 
