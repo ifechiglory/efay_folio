@@ -20,10 +20,25 @@ const Button = ({
     danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500'
   };
   
+  // Enhanced sizes with responsive options
   const sizes = {
     sm: 'px-3 py-1.5 text-sm rounded-lg',
     md: 'px-4 py-2 text-base rounded-lg',
-    lg: 'px-6 py-3 text-lg rounded-xl'
+    lg: 'px-6 py-3 text-lg rounded-xl',
+    // Responsive size - scales with screen size
+    responsive: `
+      px-3 py-1.5 text-sm rounded-lg
+      sm:px-4 sm:py-2 sm:text-base 
+      md:px-5 md:py-2.5 
+      lg:px-6 lg:py-3 lg:text-lg
+    `,
+    // Extra responsive for hero sections
+    hero: `
+      px-4 py-2 text-base rounded-lg
+      sm:px-5 sm:py-2.5 sm:text-lg
+      md:px-6 md:py-3 md:text-xl
+      lg:px-8 lg:py-4 lg:text-xl
+    `
   };
 
   return (

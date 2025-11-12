@@ -22,21 +22,21 @@ const Hero = () => {
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
                 Frontend <span className="text-blue-600">Developer</span>
               </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg">
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg text-justify">
                 Crafting digital experiences with modern technologies. I build
                 fast, accessible, and visually appealing web applications.
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex md:flex-wrap gap-4">
               <a href="#projects">
-                <Button size="lg" icon={ArrowDown}>
+                <Button size="responsive" icon={ArrowDown}>
                   View My Work
                 </Button>
               </a>
               <a href="#contact">
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="responsive">
                   Get In Touch
                 </Button>
               </a>
