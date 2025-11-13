@@ -55,13 +55,14 @@ const Header = () => {
           <div className="flex md:hidden items-center space-x-2">
             <button
               onClick={toggleMobileMenu}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-400 hover:bg-gray-500 dark:hover:bg-gray-600 transition-colors"
+              className="p-3 rounded-lg bg-gray-200 dark:bg-gray-400 hover:bg-gray-500 dark:hover:bg-gray-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5" aria-hidden="true" />
               ) : (
-                <Menu className="w-5 h-5" />
+                <Menu className="w-5 h-5" aria-hidden="true" />
               )}
             </button>
           </div>
