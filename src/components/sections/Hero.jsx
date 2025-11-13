@@ -1,9 +1,52 @@
 // src/components/sections/Hero.jsx
-import { motion } from 'framer-motion';
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
-import Button from '../ui/Button';
+import { motion } from "framer-motion";
+import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import Button from "../ui/Button";
+import { useState, useEffect, useMemo } from "react";
 
 const Hero = () => {
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  const roles = useMemo(
+    () => [
+      "Developer",
+      "Architect",
+      "Designer",
+      "Innovator",
+      "Specialist",
+      "Visionary",
+    ],
+    []
+  );
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const current = loopNum % roles.length;
+      const fullText = roles[current];
+
+      setText(
+        isDeleting
+          ? fullText.substring(0, text.length - 1)
+          : fullText.substring(0, text.length + 1)
+      );
+
+      setTypingSpeed(isDeleting ? 75 : 150);
+
+      if (!isDeleting && text === fullText) {
+        setTimeout(() => setIsDeleting(true), 1000);
+      } else if (isDeleting && text === "") {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, roles, typingSpeed]);
+
   return (
     <section
       id="home"
@@ -20,10 +63,14 @@ const Hero = () => {
           >
             <div className="space-y-4">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
-                Frontend <span className="text-blue-600">Developer</span>
+                Frontend{" "}
+                <span className="text-blue-600 relative">
+                  {text}
+                  <span className="absolute -right-2 top-0 bottom-0 w-0.5 bg-blue-600 animate-pulse"></span>
+                </span>{" "}
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg text-justify">
-                Crafting digital experiences with modern technologies. I build
+                I tell stories through clean, clear designs, crafting digital experiences with modern technologies. I build
                 fast, accessible, and visually appealing web applications.
               </p>
             </div>
@@ -71,8 +118,7 @@ const Hero = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative"
           >
-            <div className="relative w-full h-96 bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl flex items-end justify-center overflow-hidden shadow-2xl">
-              {/* Profile Image - Very large and popping out dramatically */}
+            <div className="relative w-full h-96 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-end justify-center overflow-hidden shadow-2xl">
               <div className="absolute -top-12 w-80 h-96 flex items-center justify-center">
                 <img
                   src="/profile.png"

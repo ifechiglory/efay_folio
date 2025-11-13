@@ -51,7 +51,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className={theme}>
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors ">
+        <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900 transition-colors ">
           <Router>
             <Routes>
               {/* Public Portfolio Route */}

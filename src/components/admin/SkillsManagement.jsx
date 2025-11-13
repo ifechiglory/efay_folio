@@ -23,7 +23,7 @@ const SkillsManagement = () => {
     resolver: zodResolver(skillSchema),
   });
 
-  const categories = ['Frontend', 'Backend', 'Tools', 'Soft Skills', 'Other'];
+  const categories = ['Frontend Core', 'Backend & APIs', 'Frameworks & Libraries', 'Styling & Design', 'Dev & Build Tools', 'Database & Storage', 'Deployment', 'Performance Optimization', 'Soft Skills', 'React Ecosystem'];
 
   const handleCreateSkill = () => {
     setEditingSkill(null);

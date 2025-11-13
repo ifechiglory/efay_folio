@@ -1,6 +1,22 @@
-// src/components/sections/About.jsx
+// src/components/sections/About.jsx - Updated Skills Section
 import { motion } from 'framer-motion';
-import { Cog, Calendar, MapPin, Download } from 'lucide-react';
+
+import {
+  Cog,
+  Calendar,
+  Download,
+  Code,
+  Palette,
+  GitBranch,
+  Zap,
+  Layout,
+  Cpu,
+  Settings,
+  Database,
+  Server,
+  Users,
+  Atom,
+} from "lucide-react";
 import { useSkills } from '../../hooks/useSkills';
 import { useExperience } from '../../hooks/useExperience';
 import { useDownload } from '../../hooks/useDownload';
@@ -10,13 +26,6 @@ const About = () => {
   const { downloadFile } = useDownload();
   const { data: skills = [] } = useSkills();
   const { data: experiences = [] } = useExperience();
-
-  const skillCategories = {
-    'Frontend': skills.filter(skill => skill.category === 'Frontend'),
-    'Backend': skills.filter(skill => skill.category === 'Backend'),
-    'Tools': skills.filter(skill => skill.category === 'Tools'),
-    'Soft Skills': skills.filter(skill => skill.category === 'Soft Skills'),
-  };
 
   const handleDownloadResume = () => {
     downloadFile("/resume.pdf", "Ifechukwu.pdf");
@@ -30,6 +39,103 @@ const About = () => {
       year: "numeric",
       month: "short",
     });
+  };
+
+  // Transform Supabase data into badge sections
+  const getSkillSections = () => {
+    const categoryConfigs = {
+      "Frontend Core": {
+        title: "Frontend Fundamentals",
+        subtitle: "Core web technologies & browser APIs",
+        icon: <Code className="w-5 h-5 text-gray-300" />,
+        color: "blue",
+      },
+      "Backend & APIs": {
+        title: "Backend & API Development",
+        subtitle: "Server-side logic & API integration",
+        icon: <Cpu className="w-5 h-5 text-gray-300" />,
+        color: "green",
+      },
+
+      "React Ecosystem": {
+        title: "React Ecosystem",
+        subtitle: "React-specific tools & libraries",
+        icon: <Atom className="w-5 h-5 text-gray-300" />,
+        color: "cyan",
+      },
+      "Frameworks & Libraries": {
+        title: "Frameworks & Libraries",
+        subtitle: "Modern development frameworks & tools",
+        icon: <Layout className="w-5 h-5 text-gray-300" />,
+        color: "purple",
+      },
+      "Styling & Design": {
+        title: "UI/UX & Styling",
+        subtitle: "Design systems & visual implementation",
+        icon: <Palette className="w-5 h-5 text-gray-300" />,
+        color: "pink",
+      },
+      "Dev & Build Tools": {
+        title: "Development Tools",
+        subtitle: "Version control & development workflow",
+        icon: <Settings className="w-5 h-5 text-gray-300" />,
+        color: "gray",
+      },
+      "Database & Storage": {
+        title: "Database & Storage",
+        subtitle: "Data management & persistence solutions",
+        icon: <Database className="w-5 h-5 text-gray-300" />,
+        color: "orange",
+      },
+      Deployment: {
+        title: "Deployment & DevOps",
+        subtitle: "CI/CD & production deployment",
+        icon: <Server className="w-5 h-5 text-gray-300" />,
+        color: "red",
+      },
+      "Performance Optimization": {
+        title: "Performance & Optimization",
+        subtitle: "Speed, efficiency & user experience",
+        icon: <Zap className="w-5 h-5 text-gray-300" />,
+        color: "amber",
+      },
+      "Soft Skills": {
+        title: "Professional Skills",
+        subtitle: "Collaboration & project management",
+        icon: <Users className="w-5 h-5 text-gray-300" />,
+        color: "indigo",
+      },
+    };
+
+    // Map Supabase categories to our section structure
+    return Object.entries(categoryConfigs).map(([supabaseCategory, config]) => {
+      const skillsInCategory = skills.filter(skill => skill.category === supabaseCategory);
+      
+      return {
+        ...config,
+        skills: skillsInCategory.map(skill => skill.name)
+      };
+    }).filter(section => section.skills.length > 0); // Only show sections with skills
+  };
+
+  const skillSections = getSkillSections();
+
+  const colorClasses = {
+    blue: "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800",
+    green:
+      "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800",
+    purple:
+      "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800",
+    orange:
+      "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800",
+    pink: "bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 border-pink-200 dark:border-pink-800",
+    indigo:
+      "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800",
+    gray: "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700",
+    red: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800",
+    amber:
+      "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800",
+    cyan: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
   };
 
   return (
@@ -48,6 +154,10 @@ const About = () => {
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             About Me
           </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Passionate developer with a focus on creating exceptional digital
+            experiences
+          </p>
         </motion.div>
 
         {/* About & Experience - Two Column Layout */}
@@ -57,15 +167,25 @@ const About = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-y-6"
+            className="space-y-12 mt-16"
           >
-            <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed text-lg text-justify">
+            <div className="relative">
+              <img
+                src="ife.jpeg"
+                alt="Ifechukwu Edet"
+                className="w-full h-98 object-cover rounded-xl shadow-lg"
+              />
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-900/60 rounded-full"></div>
+            </div>
+            <div className="space-y-8 text-gray-600 dark:text-gray-300 leading-relaxed text-lg text-justify">
               <p>
                 I'm a Frontend Developer specializing in building responsive,
                 production-ready applications with{" "}
                 <strong>React, Vite, and Tailwind CSS</strong>. I bridge the gap
                 between design and development, transforming detailed Figma
-                prototypes into pixel-perfect, accessible web experiences.
+                prototypes into pixel-perfect, accessible web experiences. I
+                write clean,cmaintainable code that scales gracefully across
+                devices and use cases.
               </p>
               <p>
                 Beyond development, I've led
@@ -75,22 +195,13 @@ const About = () => {
                 concepts clearly enhancing collaboration and knowledge sharing
                 within development teams.
               </p>
-
-              <p>
-                I'm passionate about creating web experiences that{" "}
-                <strong>
-                  balance aesthetic precision with practical functionality
-                </strong>
-                , ensuring they not only look exceptional but perform flawlessly
-                for users.
-              </p>
             </div>
 
             {/* Download Resume Button */}
             <div className="pt-4">
               <Button
                 icon={Download}
-                size="responsive"
+                size="lg"
                 onClick={handleDownloadResume}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
@@ -159,7 +270,7 @@ const About = () => {
                     </ul>
 
                     {experience.skills && experience.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-4" id="skills">
+                      <div className="flex flex-wrap gap-2 mt-4">
                         {experience.skills.map((skill) => (
                           <span
                             key={skill}
@@ -188,7 +299,7 @@ const About = () => {
           </motion.div>
         </div>
 
-        {/* Skills Section - Full Width Row */}
+        {/* Skills Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -200,67 +311,94 @@ const About = () => {
             Skills & Technologies
           </h3>
 
-          <div className="space-y-12">
-            {Object.entries(skillCategories).map(
-              ([category, categorySkills]) => {
-                if (categorySkills.length === 0) return null;
+          {skillSections.length > 0 ? (
+            <>
+              <div className="skills-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {skillSections.map((section, index) => (
+                  <motion.div
+                    key={section.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="skill-card bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 
+                 transition-all duration-300 ease-out
+                 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105 hover:z-20
+                 group relative"
+                    whileHover={{
+                      scale: 1.02,
+                      y: -8,
+                      transition: { duration: 0.3 },
+                    }}
+                  >
+                    {/* Section Header */}
+                    <div className="flex items-center mb-3">
+                      <div
+                        className={`p-2 rounded-lg ${
+                          colorClasses[section.color].split(" ")[0]
+                        } ${colorClasses[section.color].split(" ")[1]}`}
+                      >
+                        {section.icon}
+                      </div>
+                      <div className="ml-3">
+                        <h4 className="font-bold text-gray-900 dark:text-white text-lg">
+                          {section.title}
+                        </h4>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {section.subtitle}
+                        </p>
+                      </div>
+                    </div>
 
-                return (
-                  <div key={category} className="space-y-6">
-                    <h4 className="text-xl font-semibold text-gray-900 dark:text-white text-justify mb-2">
-                      {category}
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {categorySkills.map((skill) => (
-                        <motion.div
-                          key={skill.id}
-                          initial={{ opacity: 0, scale: 0.9 }}
+                    {/* Skills Badges */}
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {section.skills.map((skill, skillIndex) => (
+                        <motion.span
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.8 }}
                           whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3 }}
-                          whileHover={{
-                            scale: 1.02,
-                            transition: { duration: 0.2 },
+                          transition={{
+                            duration: 0.3,
+                            delay: index * 0.1 + skillIndex * 0.05,
                           }}
-                          className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
+                          className={`px-3 py-2 rounded-full text-sm font-medium border ${
+                            colorClasses[section.color]
+                          }`}
                         >
-                          <div className="text-center space-y-4">
-                            {/* Skill Name */}
-                            <h5 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">
-                              {skill.name}
-                            </h5>
-
-                            {/* Progress Bar */}
-                            <div className="space-y-2">
-                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                                <motion.div
-                                  initial={{ width: 0 }}
-                                  whileInView={{
-                                    width: `${skill.proficiency * 10}%`,
-                                  }}
-                                  transition={{ duration: 1, delay: 0.2 }}
-                                  className="bg-linear-to-r from-blue-500 to-blue-600 h-2.5 rounded-full shadow-inner"
-                                />
-                              </div>
-
-                              {/* Proficiency Level */}
-                              <div className="flex justify-between items-center text-xs">
-                                <span className="text-gray-500 dark:text-gray-400">
-                                  Proficiency
-                                </span>
-                                <span className="font-semibold text-blue-600 dark:text-blue-400">
-                                  {skill.proficiency}/10
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
+                          {skill}
+                        </motion.span>
                       ))}
                     </div>
-                  </div>
-                );
-              }
-            )}
-          </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Learning Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="text-center mt-12"
+              >
+                <div className="inline-flex items-center px-6 py-3 bg-linear-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg">
+                  <Zap className="w-5 h-5 mr-2" />
+                  <span className="font-semibold">
+                    Always Learning & Growing
+                  </span>
+                </div>
+              </motion.div>
+            </>
+          ) : (
+            /* Empty Skills State */
+            <div className="text-center py-12">
+              <Cog className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                Skills coming soon
+              </h4>
+              <p className="text-gray-600 dark:text-gray-400">
+                Skills will appear here once added through the admin dashboard
+              </p>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>
