@@ -1,5 +1,6 @@
-// src/components/sections/About.jsx - Updated Skills Section
-import { motion } from 'framer-motion';
+// src/components/sections/About.jsx - Complete with Skills Section
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 import {
   Cog,
@@ -17,15 +18,16 @@ import {
   Users,
   Atom,
 } from "lucide-react";
-import { useSkills } from '../../hooks/useSkills';
-import { useExperience } from '../../hooks/useExperience';
-import { useDownload } from '../../hooks/useDownload';
-import Button from '../ui/Button';
+import { useSkills } from "../../hooks/useSkills";
+import { useExperience } from "../../hooks/useExperience";
+import { useDownload } from "../../hooks/useDownload";
+import Button from "../ui/Button";
 
 const About = () => {
   const { downloadFile } = useDownload();
   const { data: skills = [] } = useSkills();
   const { data: experiences = [] } = useExperience();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleDownloadResume = () => {
     downloadFile("/resume.pdf", "Ifechukwu.pdf");
@@ -108,14 +110,18 @@ const About = () => {
     };
 
     // Map Supabase categories to our section structure
-    return Object.entries(categoryConfigs).map(([supabaseCategory, config]) => {
-      const skillsInCategory = skills.filter(skill => skill.category === supabaseCategory);
-      
-      return {
-        ...config,
-        skills: skillsInCategory.map(skill => skill.name)
-      };
-    }).filter(section => section.skills.length > 0); // Only show sections with skills
+    return Object.entries(categoryConfigs)
+      .map(([supabaseCategory, config]) => {
+        const skillsInCategory = skills.filter(
+          (skill) => skill.category === supabaseCategory
+        );
+
+        return {
+          ...config,
+          skills: skillsInCategory.map((skill) => skill.name),
+        };
+      })
+      .filter((section) => section.skills.length > 0); // Only show sections with skills
   };
 
   const skillSections = getSkillSections();
@@ -170,30 +176,44 @@ const About = () => {
             className="space-y-12 mt-16"
           >
             <div className="relative">
-              <img
-                src="ife.jpeg"
-                alt="Ifechukwu Edet"
-                className="w-full h-98 object-cover rounded-xl shadow-lg"
-              />
+              <div className="relative w-full h-98 overflow-hidden rounded-xl">
+                {/* Loading placeholder */}
+                {!imageLoaded && (
+                  <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl blur-sm z-10" />
+                )}
+
+                <picture>
+                  <source srcSet="/ife.webp" type="image/webp" />
+                  <img
+                    src="/ife.jpeg"
+                    alt="Ifechukwu Edet"
+                    className={`w-full h-full object-cover rounded-xl shadow-lg transition-all duration-500 ${
+                      imageLoaded
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-105"
+                    }`}
+                    loading="eager"
+                    width={400}
+                    height={500}
+                    onLoad={() => setImageLoaded(true)}
+                  />
+                </picture>
+              </div>
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-900/60 rounded-full"></div>
             </div>
+
             <div className="space-y-8 text-gray-600 dark:text-gray-300 leading-relaxed text-lg text-justify">
               <p>
                 I'm a Frontend Developer specializing in building responsive,
                 production-ready applications with{" "}
                 <strong>React, Vite, and Tailwind CSS</strong>. I bridge the gap
                 between design and development, transforming detailed Figma
-                prototypes into pixel-perfect, accessible web experiences. I
-                write clean,cmaintainable code that scales gracefully across
+                prototypes into pixel-perfect, accessible web experiences. <br></br> I
+                write clean, maintainable code that scales gracefully across
                 devices and use cases.
               </p>
               <p>
-                Beyond development, I've led
-                <strong> frontend training programs</strong>, designing
-                comprehensive learning paths for HTML, CSS, JavaScript, and
-                React. This experience honed my ability to communicate complex
-                concepts clearly enhancing collaboration and knowledge sharing
-                within development teams.
+                Beyond development, I've led <strong> frontend training programs</strong>, designing comprehensive learning paths for HTML, CSS, JavaScript, and React. This experience honed my ability to communicate complex concepts clearly enhancing collaboration and knowledge sharing within development teams.
               </p>
             </div>
 

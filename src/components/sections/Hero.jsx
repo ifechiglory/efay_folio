@@ -70,8 +70,9 @@ const Hero = () => {
                 </span>{" "}
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg text-justify">
-                I tell stories through clean, clear designs, crafting digital experiences with modern technologies. I build
-                fast, accessible, and visually appealing web applications.
+                I tell stories through clean, clear designs, crafting digital
+                experiences with modern technologies. I build fast, accessible,
+                and visually appealing web applications.
               </p>
             </div>
 
@@ -120,11 +121,17 @@ const Hero = () => {
           >
             <div className="relative w-full h-96 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-end justify-center overflow-hidden shadow-2xl">
               <div className="absolute -top-12 w-80 h-96 flex items-center justify-center">
-                <img
-                  src="/profile.png"
-                  alt="Profile"
-                  className="w-full h-full object-cover object-top rounded-t-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
-                />
+                <picture>
+                  <source srcSet="/profile.webp" type="image/webp" />
+                  <img
+                    src="/profile.png"
+                    alt="Profile"
+                    className="w-full h-full object-cover object-top rounded-t-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                    loading="eager"
+                    width={320}
+                    height={384}
+                  />
+                </picture>
               </div>
 
               {/* Strong linear overlay */}
