@@ -1,12 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import {LogIn, Menu, X } from "lucide-react";
+import { LogIn, Menu, X } from "lucide-react";
 import Button from "../ui/Button";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
 const Header = () => {
   const location = useLocation();
-  const showAdminButton = import.meta.env.VITE_SHOW_ADMIN_BUTTON === "true";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.hash === path;
@@ -37,9 +36,7 @@ const Header = () => {
               Efay
             </span>
           </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex space-x-6">
             {navigationItems.map((item) => (
               <a
                 key={item.href}
@@ -54,18 +51,6 @@ const Header = () => {
               </a>
             ))}
           </nav>
-
-          {/* Desktop Theme Toggle & Admin */}
-          <div className="hidden md:flex items-center space-x-4">
-         {showAdminButton && (
-              <Link to="/admin/login">
-                <Button variant="primary" size="sm" icon={LogIn}>
-                  Admin
-                </Button>
-              </Link>
-            )}
-          </div>
-
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-2">
             <button
