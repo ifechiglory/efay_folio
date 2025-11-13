@@ -1,18 +1,36 @@
 // src/components/sections/Projects.jsx
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { ExternalLink, Github, Eye } from 'lucide-react';
-import { useProjects } from '../../hooks/useProjects';
-import Button from '../ui/Button';
-import ProjectModal from './ProjectModal';
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { ExternalLink, Github, Eye } from "lucide-react";
+import { useProjects } from "../../hooks/useProjects";
+import {
+  getOptimizedImageWithProfile,
+  getOptimizedImageUrl,
+} from "../../lib/cloudinary";
+import Button from "../ui/Button";
+import ProjectModal from "./ProjectModal";
+
+// Custom hook for optimized projects data
+const useOptimizedProjects = () => {
+  const { data: projects = [], isLoading, ...rest } = useProjects();
+
+  const optimizedProjects = projects.map((project) => ({
+    ...project,
+    image_url: project.image_url
+      ? getOptimizedImageWithProfile(project.image_url, "preview")
+      : null,
+  }));
+
+  return { data: optimizedProjects, isLoading, ...rest };
+};
 
 const Projects = () => {
-  const { data: projects = [], isLoading } = useProjects();
+  const { data: projects = [], isLoading } = useOptimizedProjects();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  const featuredProjects = projects.filter(project => project.featured);
-  const otherProjects = projects.filter(project => !project.featured);
+
+  const featuredProjects = projects.filter((project) => project.featured);
+  const otherProjects = projects.filter((project) => !project.featured);
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
@@ -22,6 +40,16 @@ const Projects = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProject(null);
+  };
+
+  const handleImageError = (e) => {
+    // Fallback if optimized image fails to load
+    e.target.style.display = "none";
+    const parent = e.target.parentElement;
+    const fallbackDiv = parent.querySelector(".image-fallback");
+    if (fallbackDiv) {
+      fallbackDiv.style.display = "flex";
+    }
   };
 
   if (isLoading) {
@@ -76,19 +104,31 @@ const Projects = () => {
                   className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                   onClick={() => handleProjectClick(project)}
                 >
-                  {/* Project Image */}
+                  {/* Project Image - OPTIMIZED */}
                   <div className="relative h-64 bg-gray-100 dark:bg-gray-700">
                     {project.image_url ? (
                       <img
-                        src={project.image_url}
+                        src={getOptimizedImageWithProfile(
+                          project.image_url,
+                          "highQuality"
+                        )}
                         alt={project.title}
+                        loading="lazy"
+                        decoding="async"
+                        width="600"
+                        height="320"
                         className="w-full h-full object-cover"
+                        onError={handleImageError}
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <Eye className="w-12 h-12" />
-                      </div>
-                    )}
+                    ) : null}
+                    {/* Fallback when no image or image fails to load */}
+                    <div
+                      className={`image-fallback w-full h-full flex items-center justify-center text-gray-400 ${
+                        project.image_url ? "hidden" : "flex"
+                      }`}
+                    >
+                      <Eye className="w-12 h-12" />
+                    </div>
                     <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-300" />
                   </div>
 
@@ -103,25 +143,23 @@ const Projects = () => {
 
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {Array.isArray(project.tech_stack) ? ( 
-                        project.tech_stack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
-                          >
-                            {tech}
-                          </span>
-                        ))
-                      ) : (
-                        project.tech_stack?.split(",").map((tech) => (
-                          <span
-                            key={tech.trim()}
-                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
-                          >
-                            {tech.trim()}
-                          </span>
-                        ))
-                      )}
+                      {Array.isArray(project.tech_stack)
+                        ? project.tech_stack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
+                            >
+                              {tech}
+                            </span>
+                          ))
+                        : project.tech_stack?.split(",").map((tech) => (
+                            <span
+                              key={tech.trim()}
+                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
+                            >
+                              {tech.trim()}
+                            </span>
+                          ))}
                     </div>
 
                     {/* Project Links */}
@@ -136,9 +174,9 @@ const Projects = () => {
                           <Button icon={ExternalLink}>Live Demo</Button>
                         </a>
                       )}
-                      {project.github_link && ( 
+                      {project.github_link && (
                         <a
-                          href={project.github_link} 
+                          href={project.github_link}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()} // Prevent modal from opening when clicking links
@@ -173,19 +211,31 @@ const Projects = () => {
                   className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                   onClick={() => handleProjectClick(project)}
                 >
-                  {/* Project Image */}
+                  {/* Project Image - OPTIMIZED */}
                   <div className="relative h-48 bg-gray-100 dark:bg-gray-700">
                     {project.image_url ? (
                       <img
-                        src={project.image_url}
+                        src={getOptimizedImageWithProfile(
+                          project.image_url,
+                          "thumbnail"
+                        )}
                         alt={project.title}
+                        loading="lazy"
+                        decoding="async"
+                        width="400"
+                        height="192"
                         className="w-full h-full object-cover"
+                        onError={handleImageError}
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <Eye className="w-8 h-8" />
-                      </div>
-                    )}
+                    ) : null}
+                    {/* Fallback when no image or image fails to load */}
+                    <div
+                      className={`image-fallback w-full h-full flex items-center justify-center text-gray-400 ${
+                        project.image_url ? "hidden" : "flex"
+                      }`}
+                    >
+                      <Eye className="w-8 h-8" />
+                    </div>
                   </div>
 
                   {/* Project Content */}
@@ -199,30 +249,32 @@ const Projects = () => {
 
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {Array.isArray(project.tech_stack) ? (
-                        project.tech_stack.slice(0, 3).map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded"
-                          >
-                            {tech}
+                      {Array.isArray(project.tech_stack)
+                        ? project.tech_stack.slice(0, 3).map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded"
+                            >
+                              {tech}
+                            </span>
+                          ))
+                        : project.tech_stack
+                            ?.split(",")
+                            .slice(0, 3)
+                            .map((tech) => (
+                              <span
+                                key={tech.trim()}
+                                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded"
+                              >
+                                {tech.trim()}
+                              </span>
+                            ))}
+                      {Array.isArray(project.tech_stack) &&
+                        project.tech_stack.length > 3 && (
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
+                            +{project.tech_stack.length - 3}
                           </span>
-                        ))
-                      ) : (
-                        project.tech_stack?.split(",").slice(0, 3).map((tech) => (
-                          <span
-                            key={tech.trim()}
-                            className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded"
-                          >
-                            {tech.trim()}
-                          </span>
-                        ))
-                      )}
-                      {Array.isArray(project.tech_stack) && project.tech_stack.length > 3 && (
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
-                          +{project.tech_stack.length - 3}
-                        </span>
-                      )}
+                        )}
                     </div>
 
                     {/* Project Links */}

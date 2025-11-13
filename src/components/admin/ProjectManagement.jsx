@@ -1,15 +1,32 @@
-// src/components/admin/ProjectManagement.jsx - Fixed version
+// src/components/admin/ProjectManagement.jsx - Optimized version
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Eye, Upload, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { projectSchema } from '../../types/schemas';
 import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from '../../hooks/useProjects';
-import { uploadToCloudinary } from '../../lib/cloudinary';
+import { uploadToCloudinary, getOptimizedImageUrl } from '../../lib/cloudinary';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Modal from '../ui/Modal';
 import { useUIStore } from '../../stores/uiStore';
+
+// Custom hook for optimized projects data
+const useOptimizedProjects = () => {
+  const { data: projects = [], isLoading, ...rest } = useProjects();
+  
+  const optimizedProjects = projects.map(project => ({
+    ...project,
+    image_url: project.image_url ? getOptimizedImageUrl(project.image_url, {
+      width: 400,
+      height: 192,
+      quality: '80',
+      format: 'auto'
+    }) : null
+  }));
+  
+  return { data: optimizedProjects, isLoading, ...rest };
+};
 
 const ProjectManagement = () => {
   const [editingProject, setEditingProject] = useState(null);
@@ -17,7 +34,7 @@ const ProjectManagement = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const { openModal, closeModal, addToast } = useUIStore();
 
-  const { data: projects = [], isLoading } = useProjects();
+  const { data: projects = [], isLoading } = useOptimizedProjects();
   const createProject = useCreateProject();
   const updateProject = useUpdateProject();
   const deleteProject = useDeleteProject();
@@ -44,7 +61,11 @@ const ProjectManagement = () => {
   const handleEditProject = (project) => {
     setEditingProject(project);
     reset(project);
-    setImagePreview(project.image_url || null);
+    setImagePreview(project.image_url ? getOptimizedImageUrl(project.image_url, {
+      width: 600,
+      height: 240,
+      quality: '90'
+    }) : null);
     openModal("project-form");
   };
 
@@ -182,6 +203,15 @@ const ProjectManagement = () => {
     }
   };
 
+  const handleImageError = (e) => {
+    // Fallback if optimized image fails to load
+    e.target.style.display = 'none';
+    const fallbackDiv = e.target.nextSibling;
+    if (fallbackDiv) {
+      fallbackDiv.style.display = 'flex';
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="p-6">
@@ -222,19 +252,28 @@ const ProjectManagement = () => {
             key={project.id}
             className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-300"
           >
-            {/* Project Image */}
+            {/* Optimized Project Image */}
             <div className="relative h-48 bg-gray-100 dark:bg-gray-700">
               {project.image_url ? (
                 <img
                   src={project.image_url}
-                  alt={project.title}
+                  alt={`Screenshot of ${project.title} project`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="192"
+                  onError={handleImageError}
                 />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <Upload className="w-12 h-12" />
-                </div>
-              )}
+              ) : null}
+              {/* Fallback when no image or image fails to load */}
+              <div 
+                className={`w-full h-full flex items-center justify-center text-gray-400 ${
+                  project.image_url ? 'hidden' : 'flex'
+                }`}
+              >
+                <Upload className="w-12 h-12" />
+              </div>
             </div>
 
             <div className="p-4">
@@ -281,6 +320,7 @@ const ProjectManagement = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                      aria-label={`View live demo of ${project.title}`}
                     >
                       <Eye className="w-4 h-4" />
                     </a>
@@ -368,18 +408,30 @@ const ProjectManagement = () => {
               Project Image
             </label>
 
-            {/* Image Preview */}
+            {/* Optimized Image Preview */}
             {(imagePreview || watch("image_url")) && (
               <div className="mb-4 relative">
                 <img
-                  src={imagePreview || watch("image_url")}
+                  src={imagePreview || getOptimizedImageUrl(watch("image_url"), {
+                    width: 600,
+                    height: 240,
+                    quality: '90'
+                  })}
                   alt="Project preview"
                   className="w-full h-48 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                  loading="eager"
+                  decoding="sync"
+                  width="600"
+                  height="240"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
                 />
                 <button
                   type="button"
                   onClick={removeImage}
                   className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                  aria-label="Remove image"
                 >
                   <X className="w-4 h-4" />
                 </button>

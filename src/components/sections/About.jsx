@@ -399,12 +399,6 @@ const About = () => {
                 transition={{ duration: 0.5, delay: 0.6 }}
                 className="text-center mt-12"
               >
-                <div className="inline-flex items-center px-6 py-3 bg-linear-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg">
-                  <Zap className="w-5 h-5 mr-2" />
-                  <span className="font-semibold">
-                    Always Learning & Growing
-                  </span>
-                </div>
               </motion.div>
             </>
           ) : (
