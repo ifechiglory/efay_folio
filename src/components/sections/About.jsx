@@ -391,18 +391,8 @@ const About = () => {
                   </motion.div>
                 ))}
               </div>
-
-              {/* Learning Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="text-center mt-12"
-              >
-              </motion.div>
             </>
           ) : (
-            /* Empty Skills State */
             <div className="text-center py-12">
               <Cog className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -418,5 +408,4 @@ const About = () => {
     </section>
   );
 };
-
 export default About;
