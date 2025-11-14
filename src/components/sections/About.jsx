@@ -16,7 +16,7 @@ import {
   Server,
   Users,
   Atom, } from "lucide-react";
-import { useSkills } from "@hooks/useSkills";
+import { useSkills } from "@/hooks/useSkills";
 import { useExperience } from "@hooks/useExperience";
 import { useDownload } from "@hooks/useDownload";
 import Button from "@ui/Button";
@@ -28,7 +28,7 @@ const About = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleDownloadResume = () => {
-    downloadFile("/resume.pdf", "Ifechukwu.pdf");
+    downloadFile("/efay_folio/resume.pdf", "Ifechukwu.pdf");
   };
 
   const formatDate = (dateString) => {
