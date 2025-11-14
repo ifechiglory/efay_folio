@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { LogIn, Menu, X } from "lucide-react";
-import Button from "../ui/Button";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import logo from '@assets/images/logo.png';
 
 const Header = () => {
   const location = useLocation();
@@ -29,9 +29,8 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 w-screen rounded-xl">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link to="/#home" className="flex items-center space-x-2">
-            <img src="/logo.png" alt="Logo" />
+            <img src={logo} alt="Logo" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               Efay
             </span>
@@ -55,7 +54,7 @@ const Header = () => {
           <div className="flex md:hidden items-center space-x-2">
             <button
               onClick={toggleMobileMenu}
-              className="p-3 rounded-lg bg-gray-200 dark:bg-gray-400 hover:bg-gray-500 dark:hover:bg-gray-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-3 rounded-lg bg-gray-200 dark:bg-gray-400 hover:bg-gray-500 dark:hover:bg-gray-600 transition-colors min-h-11 min-w-11 flex items-center justify-center"
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -92,20 +91,6 @@ const Header = () => {
                     {item.label}
                   </a>
                 ))}
-
-                {/* Mobile Admin Button */}
-                {showAdminButton && (
-                  <Link
-                    to="/admin/login"
-                    onClick={closeMobileMenu}
-                    className="py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-center"
-                  >
-                    <div className="flex items-center justify-center space-x-2">
-                      <LogIn className="w-4 h-4" />
-                      <span>Admin</span>
-                    </div>
-                  </Link>
-                )}
               </nav>
             </div>
           </motion.div>

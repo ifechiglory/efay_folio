@@ -1,4 +1,3 @@
-// src/hooks/useDownload.js
 export const useDownload = () => {
   const downloadFile = (filePath, fileName) => {
     const link = document.createElement("a");

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@lib/supabase';
 
 export const useExperience = () => {
   return useQuery({
@@ -16,7 +16,6 @@ export const useExperience = () => {
   });
 };
 
-// In src/hooks/useExperience.js
 export const useCreateExperience = () => {
   const queryClient = useQueryClient();
 

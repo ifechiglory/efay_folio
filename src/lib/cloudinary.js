@@ -1,4 +1,3 @@
-// src/lib/cloudinary.js
 export const uploadToCloudinary = async (file) => {
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -7,12 +6,11 @@ export const uploadToCloudinary = async (file) => {
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
 
-  // Add optimization parameters for better performance
-  formData.append("quality", "auto:good"); // Balanced quality and size
-  formData.append("fetch_format", "auto"); // Auto-choose best format (WebP/AVIF)
-  formData.append("width", "1200"); // Limit max width
-  formData.append("crop", "limit"); // Maintain aspect ratio
-  formData.append("dpr", "auto"); // Device pixel ratio optimization
+  formData.append("quality", "auto:good"); 
+  formData.append("fetch_format", "auto");
+  formData.append("width", "1200");
+  formData.append("crop", "limit"); 
+  formData.append("dpr", "auto");
 
   try {
     const response = await fetch(
@@ -35,18 +33,6 @@ export const uploadToCloudinary = async (file) => {
     throw error;
   }
 };
-
-/**
- * Transforms Cloudinary image URLs for optimal performance
- * @param {string} url - Original Cloudinary URL
- * @param {Object} options - Transformation options
- * @param {number} options.width - Desired width
- * @param {number} options.height - Desired height
- * @param {string} options.quality - Image quality (auto, 80, good, best)
- * @param {string} options.format - Image format (auto, webp, jpg, png)
- * @param {string} options.crop - Cropping strategy
- * @returns {string} Optimized Cloudinary URL
- */
 export const getOptimizedImageUrl = (url, options = {}) => {
   if (!url || !url.includes("cloudinary")) return url;
 
@@ -61,8 +47,6 @@ export const getOptimizedImageUrl = (url, options = {}) => {
   };
 
   const config = { ...defaultOptions, ...options };
-
-  // Insert transformation parameters into Cloudinary URL
   const parts = url.split("/upload/");
   if (parts.length === 2) {
     const transformations = [
@@ -80,11 +64,7 @@ export const getOptimizedImageUrl = (url, options = {}) => {
   return url;
 };
 
-/**
- * Predefined optimization profiles for different use cases
- */
 export const optimizationProfiles = {
-  // For project grid thumbnails
   thumbnail: {
     width: 400,
     height: 192,
@@ -92,7 +72,6 @@ export const optimizationProfiles = {
     format: "auto",
     crop: "fill",
   },
-  // For modal/preview images
   preview: {
     width: 600,
     height: 240,
@@ -100,7 +79,6 @@ export const optimizationProfiles = {
     format: "auto",
     crop: "fill",
   },
-  // For high-quality displays
   highQuality: {
     width: 800,
     height: 400,
@@ -108,7 +86,7 @@ export const optimizationProfiles = {
     format: "auto",
     crop: "fill",
   },
-  // For mobile optimization
+
   mobile: {
     width: 300,
     height: 150,
@@ -117,25 +95,12 @@ export const optimizationProfiles = {
     crop: "fill",
   },
 };
-
-/**
- * Helper function to get optimized URL with predefined profile
- * @param {string} url - Original Cloudinary URL
- * @param {string} profile - Profile name from optimizationProfiles
- * @returns {string} Optimized Cloudinary URL
- */
 export const getOptimizedImageWithProfile = (url, profile = "thumbnail") => {
   const profileOptions =
     optimizationProfiles[profile] || optimizationProfiles.thumbnail;
   return getOptimizedImageUrl(url, profileOptions);
 };
 
-/**
- * Generates responsive image srcset for different screen sizes
- * @param {string} url - Original Cloudinary URL
- * @param {Object} breakpoints - Breakpoint configurations
- * @returns {string} srcset attribute value
- */
 export const generateSrcSet = (url, breakpoints = {}) => {
   const defaultBreakpoints = {
     "320w": { width: 320, height: 160 },
@@ -155,22 +120,15 @@ export const generateSrcSet = (url, breakpoints = {}) => {
     .join(", ");
 };
 
-/**
- * Extracts public ID from Cloudinary URL for further transformations
- * @param {string} url - Cloudinary URL
- * @returns {string} Public ID
- */
 export const getPublicIdFromUrl = (url) => {
   if (!url || !url.includes("cloudinary")) return null;
 
   try {
     const urlParts = url.split("/upload/");
     if (urlParts.length === 2) {
-      // Remove version number if present and get the path
       const pathWithTransformations = urlParts[1];
       const pathWithoutVersion = pathWithTransformations.replace(/^v\d+\//, "");
 
-      // Remove file extension
       const publicId = pathWithoutVersion.replace(/\.[^/.]+$/, "");
       return publicId;
     }
@@ -180,14 +138,6 @@ export const getPublicIdFromUrl = (url) => {
 
   return null;
 };
-
-/**
- * Creates a blurry placeholder image URL for lazy loading
- * @param {string} url - Original Cloudinary URL
- * @param {number} width - Placeholder width
- * @param {number} height - Placeholder height
- * @returns {string} Blurry placeholder URL
- */
 export const getBlurPlaceholder = (url, width = 50, height = 25) => {
   if (!url || !url.includes("cloudinary")) return null;
 
@@ -197,28 +147,17 @@ export const getBlurPlaceholder = (url, width = 50, height = 25) => {
     quality: "auto:low",
     format: "webp",
     crop: "fill",
-    effect: "blur:1000", // Heavy blur for placeholder
+    effect: "blur:1000", 
   });
 };
 
-/**
- * Validates if a URL is a Cloudinary URL
- * @param {string} url - URL to validate
- * @returns {boolean} True if Cloudinary URL
- */
 export const isCloudinaryUrl = (url) => {
   return url && url.includes("cloudinary");
 };
 
-/**
- * Fallback function if Cloudinary transformation fails
- * @param {string} url - Original URL
- * @returns {string} Safe URL to use
- */
 export const getSafeImageUrl = (url) => {
   if (!url) return null;
 
-  // If it's a Cloudinary URL, return with basic optimizations
   if (isCloudinaryUrl(url)) {
     return getOptimizedImageUrl(url, {
       width: 400,
@@ -226,7 +165,5 @@ export const getSafeImageUrl = (url) => {
       quality: "auto:good",
     });
   }
-
-  // If it's a local or other CDN URL, return as-is
   return url;
 };

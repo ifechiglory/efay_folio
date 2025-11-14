@@ -1,20 +1,17 @@
-// src/components/admin/ProjectManagement.jsx - Optimized version
 import { useState } from 'react';
 import { Plus, Edit2, Trash2, Eye, Upload, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { projectSchema } from '../../types/schemas';
-import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from '../../hooks/useProjects';
-import { uploadToCloudinary, getOptimizedImageUrl } from '../../lib/cloudinary';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import Modal from '../ui/Modal';
-import { useUIStore } from '../../stores/uiStore';
+import { projectSchema } from '@types/schemas';
+import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from '@hooks/useProjects';
+import { uploadToCloudinary, getOptimizedImageUrl } from '@lib/cloudinary';
+import Button from '@ui/Button';
+import Input from '@ui/Input';
+import Modal from '@ui/Modal';
+import { useUIStore } from '@stores/uiStore';
 
-// Custom hook for optimized projects data
 const useOptimizedProjects = () => {
   const { data: projects = [], isLoading, ...rest } = useProjects();
-  
   const optimizedProjects = projects.map(project => ({
     ...project,
     image_url: project.image_url ? getOptimizedImageUrl(project.image_url, {
@@ -44,7 +41,6 @@ const ProjectManagement = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
     watch,
   } = useForm({
     resolver: zodResolver(projectSchema),
@@ -73,7 +69,6 @@ const ProjectManagement = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Validate file type
     const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       addToast({

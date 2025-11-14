@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, MapPin, Send, Github, Linkedin } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import { contactSchema } from '../../types/schemas';
-import { useUIStore } from '../../stores/uiStore';
+import Button from '@ui/Button';
+import Input from '@ui/Input';
+import { contactSchema } from '@types/schemas';
+import { useUIStore } from '@stores/uiStore';
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

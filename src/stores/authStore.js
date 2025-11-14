@@ -1,6 +1,5 @@
-// src/stores/authStore.js
 import { create } from 'zustand';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@lib/supabase';
 
 export const useAuthStore = create((set, get) => ({
   user: null,
@@ -51,8 +50,6 @@ export const useAuthStore = create((set, get) => ({
 
   initialize: () => {
     get().checkAuth();
-    
-    // Listen for auth changes
     supabase.auth.onAuthStateChange((event, session) => {
       set({
         user: session?.user || null,

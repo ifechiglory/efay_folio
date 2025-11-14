@@ -7,15 +7,14 @@ import {
   Navigate,
 } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/queryClient";
-import Layout from "./components/layout/Layout";
-import { useUIStore } from "./stores/uiStore";
-import { useAuthStore } from "./stores/authStore";
-import AdminPanel from "./components/admin/AdminPanel";
-import LoginForm from "./components/admin/LoginForm";
-import Toast from "./components/ui/Toast";
+import { queryClient } from "@lib/queryClient";
+import Layout from "@layout/Layout";
+import { useUIStore } from "@stores/uiStore";
+import { useAuthStore } from "@stores/authStore";
+import AdminPanel from "@admin/AdminPanel";
+import LoginForm from "@admin/LoginForm";
+import Toast from "@ui/Toast";
 
-// Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
@@ -30,7 +29,6 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/admin/login" />;
 };
 
-// Public Route Component (redirect to admin if already authenticated)
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
@@ -59,10 +57,7 @@ function App() {
         <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900 transition-colors ">
           <Router>
             <Routes>
-              {/* Public Portfolio Route */}
               <Route path="/" element={<Layout />} />
-
-              {/* Admin Login Route */}
               <Route
                 path="/admin/login"
                 element={
@@ -71,8 +66,6 @@ function App() {
                   </PublicRoute>
                 }
               />
-
-              {/* Admin Dashboard Route */}
               <Route
                 path="/admin/*"
                 element={
@@ -81,8 +74,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
-              {/* Catch all route - redirect to portfolio */}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Router>

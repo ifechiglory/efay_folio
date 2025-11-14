@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Edit2, Trash2, Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { experienceSchema } from "../../types/schemas";
+import { experienceSchema } from "@types/schemas";
 import {
   useExperience,
   useCreateExperience,

@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Mail, ArrowLeft } from 'lucide-react';
-import { loginSchema } from '../../types/schemas';
-import { useAuthStore } from '../../stores/authStore';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
+import { loginSchema } from '@/types/schemas';
+import { useAuthStore } from '@/stores/authStore';
+import Button from '@ui/Button';
+import Input from '@ui/Input';
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);

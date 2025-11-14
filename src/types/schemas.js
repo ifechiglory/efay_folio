@@ -28,7 +28,6 @@ export const experienceSchema = z
   })
   .refine(
     (data) => {
-      // If current is false, endDate is required
       if (!data.current && !data.endDate) {
         return false;
       }
@@ -36,7 +35,7 @@ export const experienceSchema = z
     },
     {
       message: "End date is required when not currently working here",
-      path: ["endDate"], // This shows the error on the endDate field
+      path: ["endDate"], 
     }
   );
 

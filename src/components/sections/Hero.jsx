@@ -1,8 +1,9 @@
 // src/components/sections/Hero.jsx
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "@ui/Button";
 import { useState, useEffect, useMemo } from "react";
+import profileImage from '@assets/images/profile.webp';
 
 const Hero = () => {
   const [text, setText] = useState("");
@@ -16,8 +17,6 @@ const Hero = () => {
       "Architect",
       "Designer",
       "Innovator",
-      "Specialist",
-      "Visionary",
     ],
     []
   );
@@ -54,7 +53,6 @@ const Hero = () => {
     >
       <div className="container mx-auto px-4 py-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,16 +73,14 @@ const Hero = () => {
                 and visually appealing web applications.
               </p>
             </div>
-
-            {/* CTA Buttons */}
             <div className="flex md:flex-wrap gap-4">
               <a href="#projects">
-                <Button size="responsive" icon={ArrowDown}>
+                <Button size="lg" icon={ArrowDown}>
                   View My Work
                 </Button>
               </a>
               <a href="#contact">
-                <Button variant="outline" size="responsive">
+                <Button variant="outline" size="lg">
                   Get In Touch
                 </Button>
               </a>
@@ -125,9 +121,9 @@ const Hero = () => {
             <div className="relative w-full h-96 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-end justify-center overflow-hidden shadow-2xl">
               <div className="absolute -top-12 w-80 h-96 flex items-center justify-center">
                 <picture>
-                  <source srcSet="/profile.webp" type="image/webp" />
+                  <source srcSet={profileImage} type="image/webp" />
                   <img
-                    src="/profile.png"
+                    src={profileImage}
                     alt="Profile"
                     className="w-full h-full object-cover object-top rounded-t-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
                     loading="eager"

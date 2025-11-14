@@ -1,12 +1,11 @@
-// Updated src/components/admin/AdminPanel.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { PanelLeft, FolderGit2, Cog, Briefcase, LogOut, Settings, Home } from 'lucide-react';
-import { useAuthStore } from '../../stores/authStore';
-import { useUIStore } from '../../stores/uiStore';
+import { useAuthStore } from '@stores/authStore';
+import { useUIStore } from '@stores/uiStore';
 import ProjectManagement from './ProjectManagement';
 import SkillsManagement from './SkillsManagement';
 import ExperienceManagement from './ExperienceManagement';
-import Button from '../ui/Button';
+import Button from '@ui/Button';
 import { Link } from 'react-router-dom';
 
 const AdminPanel = () => {

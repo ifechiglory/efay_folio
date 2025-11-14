@@ -1,10 +1,9 @@
-// Updated src/components/layout/Layout.jsx
-import Header from './Header';
-import Footer from './Footer';
-import Hero from '../sections/Hero';
-import Projects from '../sections/Projects';
-import About from '../sections/About';
-import Contact from '../sections/Contact'
+import Header from '@layout/Header';
+import Footer from '@layout/Footer';
+import Hero from '@sections/Hero';
+import Projects from '@sections/Projects';
+import About from '@sections/About';
+import Contact from '@sections/Contact';
 
 const Layout = () => {
   return (

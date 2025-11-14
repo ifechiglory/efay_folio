@@ -1,4 +1,3 @@
-// src/components/layout/Footer.jsx
 import { Code2 } from 'lucide-react';
 
 const Footer = () => {

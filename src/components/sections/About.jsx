@@ -1,7 +1,6 @@
-// src/components/sections/About.jsx - Complete with Skills Section
 import { motion } from "framer-motion";
 import { useState } from "react";
-
+import profile from "@assets/images/ife.webp";
 import {
   Cog,
   Calendar,
@@ -16,12 +15,11 @@ import {
   Database,
   Server,
   Users,
-  Atom,
-} from "lucide-react";
-import { useSkills } from "../../hooks/useSkills";
-import { useExperience } from "../../hooks/useExperience";
-import { useDownload } from "../../hooks/useDownload";
-import Button from "../ui/Button";
+  Atom, } from "lucide-react";
+import { useSkills } from "@hooks/useSkills";
+import { useExperience } from "@hooks/useExperience";
+import { useDownload } from "@hooks/useDownload";
+import Button from "@ui/Button";
 
 const About = () => {
   const { downloadFile } = useDownload();
@@ -183,9 +181,9 @@ const About = () => {
                 )}
 
                 <picture>
-                  <source srcSet="/ife.webp" type="image/webp" />
+                  <source srcSet={profile} type="image/webp" />
                   <img
-                    src="/ife.jpeg"
+                    src={profile}
                     alt="Ifechukwu Edet"
                     className={`w-full h-full object-cover rounded-xl shadow-lg transition-all duration-500 ${
                       imageLoaded

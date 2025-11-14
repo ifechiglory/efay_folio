@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Plus, Edit2, Trash2, Star, Cog } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { skillSchema } from '../../types/schemas';
-import { useSkills, useCreateSkill, useUpdateSkill, useDeleteSkill } from '../../hooks/useSkills';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import Modal from '../ui/Modal';
-import { useUIStore } from '../../stores/uiStore';
+import { skillSchema } from '@types/schemas';
+import { useSkills, useCreateSkill, useUpdateSkill, useDeleteSkill } from '@hooks/useSkills';
+import Button from '@ui/Button';
+import Input from '@ui/Input';
+import Modal from '@ui/Modal';
+import { useUIStore } from '@stores/uiStore';
 
 const SkillsManagement = () => {
   const [editingSkill, setEditingSkill] = useState(null);
@@ -19,7 +19,7 @@ const SkillsManagement = () => {
   const updateSkill = useUpdateSkill();
   const deleteSkill = useDeleteSkill();
 
-  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(skillSchema),
   });
 

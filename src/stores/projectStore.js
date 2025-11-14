@@ -1,4 +1,3 @@
-// src/stores/projectStore.js
 import { create } from 'zustand';
 
 export const useProjectStore = create((set, get) => ({
