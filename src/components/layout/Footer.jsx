@@ -1,4 +1,5 @@
 import { Code2 } from 'lucide-react';
+import logo from "@assets/images/logo.svg";
 
 const Footer = () => {
   return (
@@ -6,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <Code2 className="w-5 h-5 text-blue-600" />
+            <img src={logo} alt='logo' className='rounded-lg'/>
             <span className="font-semibold text-gray-900 dark:text-white">
               Efay
             </span>

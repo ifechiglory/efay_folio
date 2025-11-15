@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import logo from '@assets/images/logo.png';
+import logo from '@assets/images/logo.svg';
 
 const Header = () => {
   const location = useLocation();
@@ -30,7 +30,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/#home" className="flex items-center space-x-2">
-            <img src={logo} alt="Logo" />
+            <img src={logo} alt="Logo" className="rounded-lg"/>
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               Efay
             </span>
