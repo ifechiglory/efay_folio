@@ -41,7 +41,6 @@ const About = () => {
     });
   };
 
-  // Transform Supabase data into badge sections
   const getSkillSections = () => {
     const categoryConfigs = {
       "Frontend Core": {
@@ -158,10 +157,6 @@ const About = () => {
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             About Me
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Passionate developer with a focus on creating exceptional digital
-            experiences
-          </p>
         </motion.div>
 
         {/* About & Experience - Two Column Layout */}

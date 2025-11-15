@@ -52,6 +52,7 @@ const Hero = () => {
       className="min-h-screen flex items-center justify-center pt-20 border-b border-gray-700/50"
     >
       <div className="container mx-auto px-4 py-16">
+        
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,16 +62,17 @@ const Hero = () => {
           >
             <div className="space-y-4">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
+                Ifechukwu Edet
+              </h1>
+              <h3 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white">
                 Frontend{" "}
                 <span className="text-blue-600 relative">
                   {text}
                   <span className="absolute -right-2 top-0 bottom-0 w-0.5 bg-blue-600 animate-pulse"></span>
                 </span>{" "}
-              </h1>
+              </h3>
               <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg text-justify">
-                I tell stories through clean, clear designs, crafting digital
-                experiences with modern technologies. I build fast, accessible,
-                and visually appealing web applications.
+                I code. I teach. I ship.
               </p>
             </div>
             <div className="flex md:flex-wrap gap-4">
