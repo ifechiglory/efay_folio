@@ -55,7 +55,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className={theme}>
         <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900 transition-colors ">
-          <Router basename="/efay_folio">
+          <Router>
             <Routes>
               <Route path="/" element={<Layout />} />
               <Route
