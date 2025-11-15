@@ -6,7 +6,7 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/efay_folio/',
+  base: '/',
   resolve: {
     alias: {
       // Root aliases - using resolve() which works from current directory
