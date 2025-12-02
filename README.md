@@ -8,8 +8,6 @@ A modern, responsive portfolio website built with React, Vite, and Tailwind CSS.
 
 - **Responsive Design**: Mobile-first approach
 
-- **Dark/Light Mode**: Theme toggle with system preference detection
-
 - **Smooth Animations**: Framer Motion for engaging interactions
 
 - **Contact Form**: EmailJS integration for direct messaging
@@ -27,6 +25,8 @@ A modern, responsive portfolio website built with React, Vite, and Tailwind CSS.
 - **React** - UI framework
 
 - **Vite** - Build tool and dev server
+
+- **Acetenity UI** - UI Component library
 
 - **Tailwind CSS** - Utility-first CSS framework
 
@@ -126,9 +126,9 @@ src/
 
 - **About**: Personal info, skills, and work experience
 
-- **Projects**: Portfolio projects with filtering
-
 - **Skills**: Technical skills and proficiencies
+
+- **Projects**: Portfolio projects
 
 - **Contact**: Contact form and social links
 
@@ -148,7 +148,7 @@ src/
 
 - `users`
 
-3. Enable Row Level Security (RLS) as needed
+3\. Enable Row Level Security (RLS) as needed
 
 ### EmailJS Setup
 
@@ -197,8 +197,6 @@ vercel --prod
 ```bash
 
 npm run build
-
-# Drag and drop dist folder to Netlify
 
 ```
 
