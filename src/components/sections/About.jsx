@@ -15,11 +15,13 @@ import {
   Database,
   Server,
   Users,
-  Atom, } from "lucide-react";
+  Atom,
+} from "lucide-react";
 import { useSkills } from "@/hooks/useSkills";
 import { useExperience } from "@hooks/useExperience";
 import { useDownload } from "@hooks/useDownload";
 import Button from "@ui/Button";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 
 const About = () => {
   const { downloadFile } = useDownload();
@@ -55,7 +57,6 @@ const About = () => {
         icon: <Cpu className="w-5 h-5 text-gray-300" />,
         color: "green",
       },
-
       "React Ecosystem": {
         title: "React Ecosystem",
         subtitle: "React-specific tools & libraries",
@@ -106,7 +107,6 @@ const About = () => {
       },
     };
 
-    // Map Supabase categories to our section structure
     return Object.entries(categoryConfigs)
       .map(([supabaseCategory, config]) => {
         const skillsInCategory = skills.filter(
@@ -118,7 +118,7 @@ const About = () => {
           skills: skillsInCategory.map((skill) => skill.name),
         };
       })
-      .filter((section) => section.skills.length > 0); // Only show sections with skills
+      .filter((section) => section.skills.length > 0);
   };
 
   const skillSections = getSkillSections();
@@ -141,13 +141,52 @@ const About = () => {
     cyan: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
   };
 
+  // In your About component, update the categoryCards:
+  const categoryCards = skillSections.map((section) => (
+    <div
+      key={section.title}
+      className="w-full h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+    >
+      <div className="flex items-center mb-4">
+        <div
+          className={`p-3 rounded-lg ${
+            colorClasses[section.color].split(" ")[0]
+          } ${colorClasses[section.color].split(" ")[1]}`}
+        >
+          {section.icon}
+        </div>
+        <div className="ml-4">
+          <h4 className="font-bold text-gray-900 dark:text-white text-lg">
+            {section.title}
+          </h4>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {section.subtitle}
+          </p>
+        </div>
+      </div>
+
+      {/* Skills Badges */}
+      <div className="flex flex-wrap gap-2">
+        {section.skills.map((skill, skillIndex) => (
+          <span
+            key={skillIndex}
+            className={`px-3 py-2 rounded-full text-sm font-medium border ${
+              colorClasses[section.color]
+            }`}
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  ));
+
   return (
     <section
       id="about"
       className="py-20 bg-white dark:bg-gray-900 border-b border-gray-700/50"
     >
       <div className="container mx-auto px-4">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -159,9 +198,7 @@ const About = () => {
           </h2>
         </motion.div>
 
-        {/* About & Experience - Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Left Column - Personal Introduction */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 md:gap-12 mb-20 p-3 space-y-9">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -169,8 +206,7 @@ const About = () => {
             className="space-y-12 mt-16"
           >
             <div className="relative">
-              <div className="relative w-full h-98 overflow-hidden rounded-xl">
-                {/* Loading placeholder */}
+              <div className="relative w-full h-80 col-span-1 overflow-hidden rounded-xl">
                 {!imageLoaded && (
                   <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl blur-sm z-10" />
                 )}
@@ -201,16 +237,20 @@ const About = () => {
                 production-ready applications with{" "}
                 <strong>React, Vite, and Tailwind CSS</strong>. I bridge the gap
                 between design and development, transforming detailed Figma
-                prototypes into pixel-perfect, accessible web experiences. <br></br> I
-                write clean, maintainable code that scales gracefully across
-                devices and use cases.
+                prototypes into pixel-perfect, accessible web experiences.{" "}
+                <br></br> I write clean, maintainable code that scales
+                gracefully across devices and use cases.
               </p>
               <p>
-                Beyond development, I've led <strong> frontend training programs</strong>, designing comprehensive learning paths for HTML, CSS, JavaScript, and React. This experience honed my ability to communicate complex concepts clearly enhancing collaboration and knowledge sharing within development teams.
+                Beyond development, I've led{" "}
+                <strong> frontend training programs</strong>, designing
+                comprehensive learning paths for HTML, CSS, JavaScript, and
+                React. This experience honed my ability to communicate complex
+                concepts clearly enhancing collaboration and knowledge sharing
+                within development teams.
               </p>
             </div>
 
-            {/* Download Resume Button */}
             <div className="pt-4">
               <Button
                 icon={Download}
@@ -223,11 +263,11 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* Right Column - Experience */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
+            className="col-span-2"
           >
             <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
               <Calendar className="w-7 h-7 mr-3 text-blue-600" />
@@ -243,15 +283,11 @@ const About = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative pl-8"
                 >
-                  {/* Timeline line */}
                   {index !== experiences.length - 1 && (
                     <div className="absolute left-3 top-8 w-0.5 h-full bg-gray-200 dark:bg-gray-700" />
                   )}
 
-                  {/* Timeline dot */}
                   <div className="absolute left-0 top-1 w-6 h-6 bg-blue-600 rounded-full border-4 border-white dark:border-gray-900 z-10" />
-
-                  {/* Content */}
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
                       <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -298,7 +334,6 @@ const About = () => {
                 </motion.div>
               ))}
 
-              {/* Empty State */}
               {experiences.length === 0 && (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <Calendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -312,7 +347,7 @@ const About = () => {
           </motion.div>
         </div>
 
-        {/* Skills Section */}
+        {/* Skills Section with Infinite Moving Category Cards */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -325,66 +360,15 @@ const About = () => {
           </h3>
 
           {skillSections.length > 0 ? (
-            <>
-              <div className="skills-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {skillSections.map((section, index) => (
-                  <motion.div
-                    key={section.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="skill-card bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 
-                 transition-all duration-300 ease-out
-                 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105 hover:z-20
-                 group relative"
-                    whileHover={{
-                      scale: 1.02,
-                      y: -8,
-                      transition: { duration: 0.3 },
-                    }}
-                  >
-                    {/* Section Header */}
-                    <div className="flex items-center mb-3">
-                      <div
-                        className={`p-2 rounded-lg ${
-                          colorClasses[section.color].split(" ")[0]
-                        } ${colorClasses[section.color].split(" ")[1]}`}
-                      >
-                        {section.icon}
-                      </div>
-                      <div className="ml-3">
-                        <h4 className="font-bold text-gray-900 dark:text-white text-lg">
-                          {section.title}
-                        </h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {section.subtitle}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Skills Badges */}
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {section.skills.map((skill, skillIndex) => (
-                        <motion.span
-                          key={skill}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{
-                            duration: 0.3,
-                            delay: index * 0.1 + skillIndex * 0.05,
-                          }}
-                          className={`px-3 py-2 rounded-full text-sm font-medium border ${
-                            colorClasses[section.color]
-                          }`}
-                        >
-                          {skill}
-                        </motion.span>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </>
+            <div className="h-[300px] rounded-md flex flex-col antialiased bg-white dark:bg-gray-800 dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+              <InfiniteMovingCards
+                items={categoryCards}
+                direction="right"
+                speed="slow"
+                pauseOnHover={true}
+                renderItem={(item, index) => item}
+              />
+            </div>
           ) : (
             <div className="text-center py-12">
               <Cog className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -401,4 +385,5 @@ const About = () => {
     </section>
   );
 };
+
 export default About;

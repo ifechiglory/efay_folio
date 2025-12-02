@@ -2,145 +2,78 @@
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import Button from "@ui/Button";
-import { useState, useEffect, useMemo } from "react";
-import profileImage from '@assets/images/profile.webp';
+import { BackgroundLines } from "@/components/ui/background-lines";
+import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 
 const Hero = () => {
-  const [text, setText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [loopNum, setLoopNum] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-
-  const roles = useMemo(
-    () => [
-      "Developer",
-      "Architect",
-      "Designer",
-      "Innovator",
-    ],
-    []
-  );
-
-  useEffect(() => {
-    const handleTyping = () => {
-      const current = loopNum % roles.length;
-      const fullText = roles[current];
-
-      setText(
-        isDeleting
-          ? fullText.substring(0, text.length - 1)
-          : fullText.substring(0, text.length + 1)
-      );
-
-      setTypingSpeed(isDeleting ? 75 : 150);
-
-      if (!isDeleting && text === fullText) {
-        setTimeout(() => setIsDeleting(true), 1000);
-      } else if (isDeleting && text === "") {
-        setIsDeleting(false);
-        setLoopNum(loopNum + 1);
-      }
-    };
-
-    const timer = setTimeout(handleTyping, typingSpeed);
-    return () => clearTimeout(timer);
-  }, [text, isDeleting, loopNum, roles, typingSpeed]);
-
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center pt-20 border-b border-gray-700/50"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden border-b border-gray-700/50"
     >
-      <div className="container mx-auto px-4 py-16">
-        
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
-                Ifechukwu Edet
-              </h1>
-              <h3 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                Frontend{" "}
-                <span className="text-blue-600 relative">
-                  {text}
-                  <span className="absolute -right-2 top-0 bottom-0 w-0.5 bg-blue-600 animate-pulse"></span>
-                </span>{" "}
-              </h3>
-              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-lg text-justify">
-                I code. I teach. I ship.
-              </p>
-            </div>
-            <div className="flex md:flex-wrap gap-4">
-              <a href="#projects">
-                <Button size="lg" icon={ArrowDown}>
-                  View My Work
-                </Button>
-              </a>
-              <a href="#contact">
-                <Button variant="outline" size="lg">
-                  Get In Touch
-                </Button>
-              </a>
-            </div>
+      <BackgroundLines className="absolute inset-0" svgOptions="duration: 5"/>
 
-            {/* Social Links */}
-            <div className="flex space-x-4 pt-4">
-              <a
-                href="https://github.com/ifechiglory"
-                className="p-3 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors min-h-11 min-w-11 flex items-center justify-center"
-                aria-label="Visit GitHub profile"
-              >
-                <Github className="w-6 h-6" aria-hidden="true" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/ifechukwuedet"
-                className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                aria-label="Visit LinkedIn profile"
-              >
-                <Linkedin className="w-6 h-6" aria-hidden="true" />
-              </a>
-              <a
-                href="#contact"
-                className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                aria-label="Send Email"
-              >
-                <Mail className="w-6 h-6" aria-hidden="true" />
-              </a>
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 pt-32">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center space-y-8"
+        >
+          {/* Text Content */}
+          <div className="space-y-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white tracking-tight">
+              Hi, I'm Ifechukwu Edet
+            </h1>
+            <div className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
+              <span className="text-white text-lg">
+                <LayoutTextFlip className="inline-block" filter={false} />
+              </span>
             </div>
-          </motion.div>
-          {/* Image/Visual Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="relative w-full h-96 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-end justify-center overflow-hidden shadow-2xl">
-              <div className="absolute -top-12 w-80 h-96 flex items-center justify-center">
-                <picture>
-                  <source srcSet={profileImage} type="image/webp" />
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-full h-full object-cover object-top rounded-t-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
-                    loading="eager"
-                    width={320}
-                    height={384}
-                    fetchpriority="high"
-                  />
-                </picture>
-              </div>
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              I code. I teach. I ship.
+            </p>
+          </div>
 
-              {/* Strong linear overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-blue-600/40 via-transparent to-transparent"></div>
-            </div>
-          </motion.div>
-        </div>
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="#projects">
+              <Button size="lg" icon={ArrowDown} className="text-lg">
+                View My Work
+              </Button>
+            </a>
+            <a href="#contact">
+              <Button variant="outline" size="lg" className="text-lg">
+                Get In Touch
+              </Button>
+            </a>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex justify-center space-x-6 pt-6">
+            <a
+              href="https://github.com/ifechiglory"
+              className="p-3 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Visit GitHub profile"
+            >
+              <Github className="w-6 h-6" aria-hidden="true" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ifechukwuedet"
+              className="p-3 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Visit LinkedIn profile"
+            >
+              <Linkedin className="w-6 h-6" aria-hidden="true" />
+            </a>
+            <a
+              href="#contact"
+              className="p-3 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Send Email"
+            >
+              <Mail className="w-6 h-6" aria-hidden="true" />
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

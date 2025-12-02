@@ -95,7 +95,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-700/50">
+    <section id="contact" className="pt-20 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-700/50">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

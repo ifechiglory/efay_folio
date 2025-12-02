@@ -2,23 +2,20 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { ExternalLink, Github, Eye } from "lucide-react";
-import { useProjects } from "../../hooks/useProjects";
+import { useProjects } from "@/hooks/useProjects";
 import {
   getOptimizedImageWithProfile,
-  getOptimizedImageUrl,
-} from "../../lib/cloudinary";
-import Button from "../ui/Button";
+  getProjectPreviewImage,
+} from "@/lib/cloudinary";
 import ProjectModal from "./ProjectModal";
 
-// Custom hook for optimized projects data
+
 const useOptimizedProjects = () => {
   const { data: projects = [], isLoading, ...rest } = useProjects();
 
   const optimizedProjects = projects.map((project) => ({
     ...project,
-    image_url: project.image_url
-      ? getOptimizedImageWithProfile(project.image_url, "preview")
-      : null,
+    image_url: getProjectPreviewImage(project),
   }));
 
   return { data: optimizedProjects, isLoading, ...rest };
@@ -28,8 +25,6 @@ const Projects = () => {
   const { data: projects = [], isLoading } = useOptimizedProjects();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const featuredProjects = projects.filter((project) => project.featured);
   const otherProjects = projects.filter((project) => !project.featured);
 
   const handleProjectClick = (project) => {
@@ -91,110 +86,6 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        {/* Featured Projects */}
-        {featuredProjects.length > 0 && (
-          <div className="mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {featuredProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-                  onClick={() => handleProjectClick(project)}
-                >
-                  {/* Project Image - OPTIMIZED */}
-                  <div className="relative h-64 bg-gray-100 dark:bg-gray-700">
-                    {project.image_url ? (
-                      <img
-                        src={getOptimizedImageWithProfile(
-                          project.image_url,
-                          "highQuality"
-                        )}
-                        alt={project.title}
-                        loading="lazy"
-                        decoding="async"
-                        width="600"
-                        height="320"
-                        className="w-full h-full object-cover"
-                        onError={handleImageError}
-                      />
-                    ) : null}
-                    {/* Fallback when no image or image fails to load */}
-                    <div
-                      className={`image-fallback w-full h-full flex items-center justify-center text-gray-400 ${
-                        project.image_url ? "hidden" : "flex"
-                      }`}
-                    >
-                      <Eye className="w-12 h-12" />
-                    </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-300" />
-                  </div>
-
-                  {/* Project Content */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    {/* Tech Stack */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {Array.isArray(project.tech_stack)
-                        ? project.tech_stack.map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
-                            >
-                              {tech}
-                            </span>
-                          ))
-                        : project.tech_stack?.split(",").map((tech) => (
-                            <span
-                              key={tech.trim()}
-                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
-                            >
-                              {tech.trim()}
-                            </span>
-                          ))}
-                    </div>
-
-                    {/* Project Links */}
-                    <div className="flex items-center space-x-4">
-                      {project.live_demo && (
-                        <a
-                          href={project.live_demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()} // Prevent modal from opening when clicking links
-                        >
-                          <Button icon={ExternalLink}>Live Demo</Button>
-                        </a>
-                      )}
-                      {project.github_link && (
-                        <a
-                          href={project.github_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()} // Prevent modal from opening when clicking links
-                        >
-                          <Button variant="outline" icon={Github}>
-                            Code
-                          </Button>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Other Projects */}
         {otherProjects.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -269,12 +160,16 @@ const Projects = () => {
                                 {tech.trim()}
                               </span>
                             ))}
-                      {Array.isArray(project.tech_stack) &&
-                        project.tech_stack.length > 3 && (
-                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
-                            +{project.tech_stack.length - 3}
-                          </span>
-                        )}
+                      {(Array.isArray(project.tech_stack)
+                        ? project.tech_stack.length > 3
+                        : project.tech_stack?.split(",").length > 3) && (
+                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
+                          +
+                          {Array.isArray(project.tech_stack)
+                            ? project.tech_stack.length - 3
+                            : project.tech_stack.split(",").length - 3}
+                        </span>
+                      )}
                     </div>
 
                     {/* Project Links */}
@@ -286,7 +181,7 @@ const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                            onClick={(e) => e.stopPropagation()} // Prevent modal from opening when clicking links
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <ExternalLink className="w-4 h-4" />
                           </a>
@@ -297,12 +192,18 @@ const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                            onClick={(e) => e.stopPropagation()} // Prevent modal from opening when clicking links
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <Github className="w-4 h-4" />
                           </a>
                         )}
                       </div>
+                      <button
+                        onClick={() => handleProjectClick(project)}
+                        className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                      >
+                        Details →
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -330,7 +231,6 @@ const Projects = () => {
           </motion.div>
         )}
 
-        {/* Project Modal */}
         <ProjectModal
           project={selectedProject}
           isOpen={isModalOpen}

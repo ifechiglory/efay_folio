@@ -54,7 +54,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className={theme}>
-        <div className="min-h-screen overflow-hidden bg-white dark:bg-gray-900 transition-colors ">
+        <div className="relative min-h-screen overflow-hidden bg-white dark:bg-gray-900 transition-colors ">
           <Router>
             <Routes>
               <Route path="/" element={<Layout />} />
