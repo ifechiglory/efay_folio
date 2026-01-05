@@ -141,7 +141,6 @@ const About = () => {
     cyan: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
   };
 
-  // In your About component, update the categoryCards:
   const categoryCards = skillSections.map((section) => (
     <div
       key={section.title}
